@@ -4,6 +4,9 @@ version = "1.0.1"
 description = "A set of tools to find Representative Periods."
 authors = ["RobinsonBeaucour <robinson.beaucour@outlook.fr>"]
 readme = "README.md"
+include = [
+    { path = "reperiods/datasets", format = ["sdist"] }
+]
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.12"
