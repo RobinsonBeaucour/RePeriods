@@ -5,6 +5,7 @@ import plotly.graph_objects as go
 from .representative_periods import RepresentativePeriods
 from .utils import duration_function
 
+
 def show_curves(data: pd.DataFrame, curve_set: pd.Index) -> go.Figure:
     """Visualize curves in a TemporalData object.
 
@@ -24,14 +25,17 @@ def show_curves(data: pd.DataFrame, curve_set: pd.Index) -> go.Figure:
         fig.add_trace(
             go.Scatter(
                 x=data.index,  # X-axis data (time horizon)
-                y=data[curve],    # Y-axis data (curve values)
-                name=curve                       # Name for the curve in the legend
+                y=data[curve],  # Y-axis data (curve values)
+                name=curve,  # Name for the curve in the legend
             )
         )
 
     return fig
 
-def show_RP(data: pd.DataFrame, curve_set: pd.Index, RPs: list[RepresentativePeriods]) -> go.Figure:
+
+def show_RP(
+    data: pd.DataFrame, curve_set: pd.Index, RPs: list[RepresentativePeriods]
+) -> go.Figure:
     """Visualize representative periods (RPs) on a plot of curves.
 
     Args:
@@ -43,7 +47,7 @@ def show_RP(data: pd.DataFrame, curve_set: pd.Index, RPs: list[RepresentativePer
         go.Figure: A Plotly figure with RPs highlighted in green.
     """
     # Create a figure by plotting the curves
-    fig = show_curves(data,curve_set)
+    fig = show_curves(data, curve_set)
 
     # Add vertical rectangles for each RP
     for RP in RPs:
@@ -51,17 +55,19 @@ def show_RP(data: pd.DataFrame, curve_set: pd.Index, RPs: list[RepresentativePer
         fig.add_vrect(
             x0=RP.data.index.min(),
             x1=RP.data.index.max(),
-            annotation_text=f"weight: {RP.weight*100:.2f}%",
+            annotation_text=f"weight: {RP.weight * 100:.2f}%",
             annotation_position="top left",
             fillcolor="green",
             opacity=0.25,
-            line_width=0
+            line_width=0,
         )
 
     return fig
 
 
-def show_DC(data: pd.DataFrame, curve_set: pd.Index, RPs: list[RepresentativePeriods]) -> go.Figure:
+def show_DC(
+    data: pd.DataFrame, curve_set: pd.Index, RPs: list[RepresentativePeriods]
+) -> go.Figure:
     """Visualize duration curves (DC) of the original data and the combined RPs.
 
     Args:
@@ -73,7 +79,18 @@ def show_DC(data: pd.DataFrame, curve_set: pd.Index, RPs: list[RepresentativePer
         go.Figure: A Plotly figure displaying duration curves.
     """
     # Define a set of colors for the curves
-    colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
+    colors = [
+        "#1f77b4",
+        "#ff7f0e",
+        "#2ca02c",
+        "#d62728",
+        "#9467bd",
+        "#8c564b",
+        "#e377c2",
+        "#7f7f7f",
+        "#bcbd22",
+        "#17becf",
+    ]
 
     # Create an empty Plotly figure
     fig = go.Figure()
@@ -96,7 +113,10 @@ def show_DC(data: pd.DataFrame, curve_set: pd.Index, RPs: list[RepresentativePer
         # Add the combined duration curve (weighted sum of RPs) as a dashed line
         fig.add_trace(
             go.Scatter(
-                x=sum(np.vectorize(duration_function(RP.data[curve]))(Y) * RP.weight for RP in RPs),
+                x=sum(
+                    np.vectorize(duration_function(RP.data[curve]))(Y) * RP.weight
+                    for RP in RPs
+                ),
                 y=Y,
                 name=f"Combined DC {curve}",
                 line_color=colors[i % 10],
@@ -105,4 +125,3 @@ def show_DC(data: pd.DataFrame, curve_set: pd.Index, RPs: list[RepresentativePer
         )
 
     return fig
-

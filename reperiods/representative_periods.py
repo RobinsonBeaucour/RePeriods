@@ -1,5 +1,6 @@
 import pandas as pd
 
+
 class RepresentativePeriods:
     """Represents a single representative period with associated data and weight.
 

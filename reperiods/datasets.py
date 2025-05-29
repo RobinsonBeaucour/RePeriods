@@ -1,6 +1,7 @@
 import pandas as pd
 
-def load_renewable(length: int=336) -> pd.DataFrame:
+
+def load_renewable(length: int = 336) -> pd.DataFrame:
     """Load renewable energy data from a CSV file.
 
     Args:
@@ -14,7 +15,7 @@ def load_renewable(length: int=336) -> pd.DataFrame:
         "https://raw.githubusercontent.com/RobinsonBeaucour/reperiods-beta/beta/reperiods/datasets/example_dataset.csv",
         sep=";",
         header=3,
-        usecols=[1, 2]
+        usecols=[1, 2],
     )
 
     # Rename columns for clarity.

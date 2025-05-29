@@ -1,6 +1,7 @@
 import pandas as pd
 from reperiods.utils import duration_function
 
+
 def test_duration_function():
     # Create a sample pandas Series for testing
     series = pd.Series(range(10))
@@ -16,6 +17,7 @@ def test_duration_function():
     # Test with time_normalized=False
     duration_func = duration_function(series, time_normalized=False)
     assert duration_func(5) == 5  # 5 elements of the series are above 5
+
 
 # Run the test
 test_duration_function()

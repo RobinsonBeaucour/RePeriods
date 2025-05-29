@@ -1,6 +1,9 @@
 import pandas as pd
 
-def duration_function(series : pd.Series, production_normalized=False, time_normalized=True):
+
+def duration_function(
+    series: pd.Series, production_normalized=False, time_normalized=True
+):
     """
     Returns a function that calculates the duration of a time series above a given threshold.
     This function considered that all point represent the same duration.
@@ -19,9 +22,14 @@ def duration_function(series : pd.Series, production_normalized=False, time_norm
     """
     series_to_use = series.copy()  # create a copy of the input series to modify
     if production_normalized:
-        series_to_use = (series_to_use - series_to_use.min())/(series_to_use.max()-series_to_use.min())  # normalize the series to be between 0 and 1
+        series_to_use = (series_to_use - series_to_use.min()) / (
+            series_to_use.max() - series_to_use.min()
+        )  # normalize the series to be between 0 and 1
     if time_normalized:
-        return lambda x : (series_to_use>=x).sum()/series_to_use.shape[0]  # return a function that calculates the proportion of the series above a threshold value
+        return (
+            lambda x: (series_to_use >= x).sum() / series_to_use.shape[0]
+        )  # return a function that calculates the proportion of the series above a threshold value
     else:
-        return lambda x : (series_to_use>=x).sum()  # return a function that calculates the raw count of the series above a threshold value
-    
+        return (
+            lambda x: (series_to_use >= x).sum()
+        )  # return a function that calculates the raw count of the series above a threshold value

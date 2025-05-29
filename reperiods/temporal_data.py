@@ -6,7 +6,6 @@ from .find_RP import poncelet_method, kmedoids_method, random_method
 from .plot import show_curves, show_DC, show_RP
 from .export import save_RP
 
-import pandas as pd
 
 class TemporalData:
     def __init__(self, data: pd.DataFrame) -> None:
@@ -39,20 +38,27 @@ class TemporalData:
             list: A list of curve names.
         """
         return self.data.columns
-    
+
     @property
     def time_horizon(self) -> pd.DatetimeIndex:
         """Get the time horizon (index) of the data.
 
         Returns:
             pd.DatetimeIndex: The time horizon of the data.
-            
+
         """
         return self.data.index
-    
-    def calculate_RP(self, method: str, N_RP: int, RP_length: int, N_bins: int =15, solver: Any=None):
+
+    def calculate_RP(
+        self,
+        method: str,
+        N_RP: int,
+        RP_length: int,
+        N_bins: int = 15,
+        solver: Any = None,
+    ):
         """Calculate representative periods (RPs) using the specified method.
-        
+
         Could be improved using protocol or ABC
 
         Args:
@@ -69,13 +75,17 @@ class TemporalData:
             None
         """
         if method == "poncelet":
-            self.RP = poncelet_method(self.data, self.curve_set, N_RP, RP_length, N_bins, solver)
+            self.RP = poncelet_method(
+                self.data, self.curve_set, N_RP, RP_length, N_bins, solver
+            )
         elif method == "kmedoids":
             self.RP = kmedoids_method(self.data, N_RP, RP_length)
         elif method == "random":
             self.RP = random_method(self.data, N_RP, RP_length)
         else:
-            raise ValueError("Invalid method. Supported methods: 'poncelet', 'kmedoids', 'random'")
+            raise ValueError(
+                "Invalid method. Supported methods: 'poncelet', 'kmedoids', 'random'"
+            )
 
     def plot_curves(self):
         """Plot the original curves.
@@ -103,7 +113,7 @@ class TemporalData:
         check_is_RP(self)
         return show_DC(self.data, self.curve_set, self.RP)
 
-    def export(self, folder_path: str ='./', sep: str =','):
+    def export(self, folder_path: str = "./", sep: str = ","):
         """
         Export representative periods (RPs) and their weights to CSV files.
 
@@ -121,8 +131,9 @@ class TemporalData:
         check_is_RP(self)
 
         # Save RPs and their weights to CSV files in the specified folder
-        save_RP(folder_path, self.RP ,sep)
-        
+        save_RP(folder_path, self.RP, sep)
+
+
 def check_is_RP(temporal_data: TemporalData):
     """Check if RPs have been calculated for the TemporalData object.
 
@@ -133,8 +144,6 @@ def check_is_RP(temporal_data: TemporalData):
         ValueError: If RPs have not been calculated.
     """
     if temporal_data.RP is None:
-        raise ValueError("Representative periods (RPs) have not been calculated. Use calculate_RP method first.")
-    
-
-
-
+        raise ValueError(
+            "Representative periods (RPs) have not been calculated. Use calculate_RP method first."
+        )
