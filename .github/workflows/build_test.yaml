@@ -29,4 +29,6 @@ jobs:
       - name: Run tests
         run: |
           uv run pytest
+          uv venv
+          uv pip install -e ".[kmedoids,dev]"
           uv run pytest --nbmake ./notebooks/
