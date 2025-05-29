@@ -2,7 +2,9 @@ from typing import Any
 
 import pandas as pd
 
-from .find_RP import poncelet_method, kmedoids_method, random_method
+from .find_RP.poncelet import poncelet_method
+from .find_RP.kmedoids import kmedoids_method
+from .find_RP.random import random_method
 from .plot import show_curves, show_DC, show_RP
 from .export import save_RP
 

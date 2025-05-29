@@ -4,10 +4,9 @@ import numpy as np
 import pandas as pd
 import pulp as pl
 from sklearn.preprocessing import MinMaxScaler
-from sklearn_extra.cluster import KMedoids
 
-from .representative_periods import RepresentativePeriods
-from .utils import duration_function
+from ..representative_periods import RepresentativePeriods
+from ..utils import duration_function
 
 
 def poncelet_method(
@@ -123,95 +122,4 @@ def poncelet_method(
             representative_periods.append(
                 RepresentativePeriods(data=P_candidates[P_id], weight=W[P_id].varValue)
             )
-    return representative_periods
-
-
-def random_method(
-    data: pd.DataFrame, N_RP: int, RP_length: int
-) -> list[RepresentativePeriods]:
-    """Generate representative periods (RPs) and their weights using random selection.
-
-    Args:
-        data (DataFrame): A DataFrame containing the data where RP will be found
-        N_RP (int): The number of representative periods to generate.
-        RP_length (int): The length of each representative period.
-
-    Returns:
-        list: A list of RepresentativePeriods objects, each representing an RP with its weight.
-    """
-    # Get RP candidates (not normalized)
-    Number_of_candidate_RP = data.shape[0] // RP_length
-    P_candidates = {
-        P_id: data.iloc[P_id * RP_length : (P_id + 1) * RP_length]
-        for P_id in range(Number_of_candidate_RP)
-    }
-
-    # Randomly choose N_RP candidate periods
-    P_id_choosen = np.random.choice(
-        np.arange(Number_of_candidate_RP), size=N_RP, replace=False
-    )
-
-    # Generate random weights and normalize them
-    weights = np.random.random(N_RP)
-    weights = weights / weights.sum()
-
-    # Create RepresentativePeriods objects for the chosen periods with their weights
-    representative_periods = [
-        RepresentativePeriods(data=P_candidates[P_id], weight=weights[i])
-        for i, P_id in enumerate(P_id_choosen)
-    ]
-
-    return representative_periods
-
-
-def kmedoids_method(
-    data: pd.DataFrame, N_RP: int, RP_length: int
-) -> list[RepresentativePeriods]:
-    """Generate representative periods (RPs) using the k-medoids clustering method. weights are calculated proportionnaly to the number of representatives in each cluster
-
-    Args:
-        data (DataFrame): A DataFrame containing the data where RP will be found
-        N_RP (int): The number of representative periods to generate.
-        RP_length (int): The length of each representative period.
-
-    Returns:
-        list: A list of RepresentativePeriods objects, each representing an RP with its weight.
-    """
-    # Get RP candidates (not normalized)
-    Number_of_candidate_RP = data.shape[0] // RP_length
-    P_candidates = {
-        P_id: data.iloc[P_id * RP_length : (P_id + 1) * RP_length]
-        for P_id in range(Number_of_candidate_RP)
-    }
-
-    # Convert candidate data to a format suitable for k-medoids
-    data = np.array(
-        [
-            P_candidate.to_numpy().reshape((RP_length * data.shape[1]), order="F")
-            for P_candidate in P_candidates.values()
-        ]
-    )
-
-    # Apply k-medoids clustering
-    kmedoids = KMedoids(metric="euclidean", n_clusters=N_RP)
-    kmedoids.fit(data)
-
-    # Count the number of data points in each cluster (representative period)
-    number_by_cluster = {
-        P_id: (kmedoids.predict(data) == k).sum()
-        for k, P_id in enumerate(kmedoids.medoid_indices_)
-    }
-
-    # Calculate weights for each representative period
-    weights = [
-        number_by_cluster[P_id] / Number_of_candidate_RP
-        for P_id in kmedoids.medoid_indices_
-    ]
-
-    # Create RepresentativePeriods objects for the medoids with their weights
-    representative_periods = [
-        RepresentativePeriods(data=P_candidates[P_id], weight=weights[i])
-        for i, P_id in enumerate(kmedoids.medoid_indices_)
-    ]
-
     return representative_periods
