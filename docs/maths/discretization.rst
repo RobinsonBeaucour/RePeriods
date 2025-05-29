@@ -11,6 +11,7 @@ Discretization
             \end{array}\right.
 
 | The figure bellow shows an example of time and power normalized duration load from a discrete time series
+
 .. figure:: ../images/maths/duration_curve_example.jpeg
 
 .. note:: 
@@ -42,6 +43,7 @@ In the case where each :math:`t_k` represents a uniform duration (which we denot
                 \end{array}\right.
 
 | Uniform case :
+
 .. math::
    \tilde{C}(f) = \left\{\begin{array}{ccc}
             \mathbb{R}_+ & \longrightarrow & [0,1]    \\ 

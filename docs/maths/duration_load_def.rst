@@ -26,6 +26,7 @@ Duration load definition
 
 | Normalized variants are possible. 
 | We can do a “power normalization” by setting:  
+
 .. math::
     \tilde{f} = \left\{\begin{array}{ccc}
         [0,T]  & \longrightarrow &  [0,1]  \\ 
@@ -34,7 +35,9 @@ Duration load definition
             f_{min} = \underset{t\in[0,T]}{\text{min }} f(t)  \\ 
             f_{max} = \underset{t\in[0,T]}{\text{max }} f(t)
             \end{array}\right.
+
 | We can do a time normalization” by setting: 
+
 .. math::
     \tilde{C}(f) = \left\{\begin{array}{ccc}
         \mathbb{R}_+ & \longrightarrow & [0,1]    \\ 
@@ -43,6 +46,8 @@ Duration load definition
             C(f)_{min} = \underset{x\in\mathbb{R}_+}{\text{min }} C(f)(x)  \\ 
             C(f)_{max} = \underset{x\in\mathbb{R}_+}{\text{max }} C(f)(x)
             \end{array}\right.
+
 | Time and power normalisation corresponds to :math:`\tilde{C}(\tilde{f})` function.
+
 .. note::
     In (`Poncelet et al., 2017`), :math:`L_{c,b} = \tilde{C}(\tilde{f_{c}})(b)` where :math:`c` is an indice to identify a load type.
