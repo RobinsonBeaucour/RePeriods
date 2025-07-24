@@ -21,7 +21,7 @@ def duration_function(
         duration_above_5 = duration_func(5)  # calculates the duration of the series above 5
     """
     series_to_use = series.copy()  # create a copy of the input series to modify
-    if production_normalized:
+    if not production_normalized:
         series_to_use = (series_to_use - series_to_use.min()) / (
             series_to_use.max() - series_to_use.min()
         )  # normalize the series to be between 0 and 1
